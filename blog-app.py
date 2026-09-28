@@ -50,6 +50,24 @@ def show_posts():
 
     return jsonify(posts)
 
+@app.route("/posts/<int:id>")
+def post_by_id(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM posts WHERE id = ?", (id, ))
+    row = cursor.fetchone()
+
+    post = {
+        "id": row["id"],
+        "title": row["title"],
+        "content": row["content"],
+        "author_id": row["author_id"],
+        "views": row["views"]
+    }
+    return jsonify(post)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
+
